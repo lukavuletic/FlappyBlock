@@ -63,17 +63,17 @@ function component(width, height, color, x, y, type) {
         }
     }
     this.newPos = function() {
-        // this.gravitySpeed += this.gravity;
+        this.gravitySpeed += this.gravity;
         this.x += this.speedX;
         this.y += this.speedY + this.gravitySpeed;
-        // this.hitBottom();
+        this.hitBottom();
     }
-    /* this.hitBottom = function(){
+    this.hitBottom = function(){
         var rockbottom = myGameArea.canvas.height - this.height;
         if(this.y > rockbottom){
             this.y = rockbottom;
         }
-    } */
+    }
     this.crashWith = function(otherobj) {
         let myleft = this.x;
         let myright = this.x + this.width;
@@ -92,6 +92,10 @@ function component(width, height, color, x, y, type) {
         }
         return crash;
     }
+}
+
+accelerate = (n) => {
+    myGamePiece.gravity = n;
 }
   
 updateGameArea = () => {
@@ -122,8 +126,11 @@ updateGameArea = () => {
         myObstacles[i].x -= 1;
         myObstacles[i].update();
     }
-    if(myGameArea.keys && myGameArea.keys[38]) {myGamePiece.speedY = -1;}
-    if(myGameArea.keys && myGameArea.keys[40]) {myGamePiece.speedY = 1;}
+    if(myGameArea.keys && myGameArea.keys[38]){
+        accelerate(-.2);
+    }else{
+        accelerate(.1);
+    }
     if(Math.floor((myGameArea.frameNo/150)-2) < 1){
         myScore.text = "SCORE: 0";
     }else{
