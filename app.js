@@ -2,6 +2,7 @@
 var myGamePiece;
 var myObstacles = [];
 var myScore;
+var myBackgroundImage;
 
 // main functions that manipulate canvas
 var myGameArea = {
@@ -108,6 +109,10 @@ function component(width, height, color, x, y, type) {
         let rockBottom = myGameArea.canvas.height - this.height;
         if(this.y > rockBottom){
             this.y = rockBottom;
+
+            // set gravity speed to 0 so block moves instantly as button is pressed
+            // otherwise gravity speed increases and has to be brought back to 0
+            this.gravitySpeed = 0;
         }
     }
 
@@ -117,6 +122,10 @@ function component(width, height, color, x, y, type) {
         let rockTop = 0;
         if(this.y < rockTop){
             this.y = rockTop;
+
+            // set gravity speed to 0 so block moves instantly as button is pressed
+            // otherwise gravity speed increases and has to be brought back to 0
+            this.gravitySpeed = 0;
         }
     }
 
@@ -207,6 +216,10 @@ updateGameArea = () => {
         myObstacles.push(new component(10, x - height - gap, "green", x, height + gap));
     }
 
+    // creates and updates background 
+    myBackgroundImage.newPos();
+    myBackgroundImage.update();
+
     // move obstacles to the left on x axis
     for(i = 0; i < myObstacles.length; i++){
         myObstacles[i].x -= 1;
@@ -229,6 +242,7 @@ updateGameArea = () => {
 
     // call functions to update the canvas
     myScore.update();
+    
     myGamePiece.newPos();
     myGamePiece.update();
 }
@@ -240,4 +254,5 @@ updateGameArea = () => {
     // create components on the canvas
     myGamePiece = new component(30, 30, "red", 10, 120);
     myScore = new component("30px", "Consolas", "black", 280, 40, "text");
+    myBackgroundImage = new component(480, 270, "lightgray", 0, 0);
 }) ();
