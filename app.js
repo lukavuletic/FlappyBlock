@@ -34,6 +34,11 @@ var myGameArea = {
         window.addEventListener('keyup', function(e){
             myGameArea.key[e.keyCode] = false;
         })
+
+        // create components on the canvas
+        myGamePiece = new component(30, 30, "red", 10, 120);
+        myScore = new component("30px", "Consolas", "black", 280, 40, "text");
+        myBackgroundImage = new component(480, 270, "lightgray", 0, 0);
     },
 
     // clears canvas
@@ -44,9 +49,22 @@ var myGameArea = {
     // stops the interval and alerts the user with his score
     stop : function() {
         clearInterval(this.interval);
-        alert(`Game over ${name}!
-Your score: ${Math.floor((myGameArea.frameNo/150)-2)}`
-        );
+        if(confirm(`Game over ${name}!
+Your score: ${Math.floor((myGameArea.frameNo/150)-2)}
+Play again?`)){
+
+            //removes the canvas, resets game data, empties key array
+            myGameArea.canvas.parentNode.removeChild(myGameArea.canvas);
+            myGamePiece = 0;
+            myObstacles = [];
+            myScore = 0;
+            myBackgroundImage = 0;
+            difficulty = 0;
+            myGameArea.key = [];
+
+            // reruns the game
+            chooseDifficulty();
+        }
     }
 }
 
@@ -259,7 +277,7 @@ enterName = () => {
     }else{
         name = txt;
     }
-
+    
     // leads you to choose difficulty screen
     chooseDifficulty();
 }
@@ -282,7 +300,7 @@ chooseDifficulty = () => {
     document.body.insertAdjacentElement('beforeend', buttonMediumGameDiff);
     document.body.insertAdjacentElement('beforeend', buttonHardGameDiff);
 
-    // on click sets the interval speed, hides elements and starts the game
+    // on click sets the interval speed, removes elements and starts the game
     buttonEasyGameDiff.addEventListener("click", function(){
         difficulty = 20;
         hideElementsOnStart(gameDiffTxt, buttonEasyGameDiff, buttonMediumGameDiff, buttonHardGameDiff);
@@ -300,24 +318,19 @@ chooseDifficulty = () => {
     });
 }
 
-// function to hide elements when the game is being played
+// function to remove elements when difficulty is chosen
 hideElementsOnStart = (txt, button1, button2, button3) => {
     this.txt = txt;
-    txt.style.visibility = 'hidden';
+    txt.parentNode.removeChild(txt);
     this.button1 = button1;
-    button1.style.visibility = 'hidden';
+    button1.parentNode.removeChild(button1);
     this.button2 = button2;
-    button2.style.visibility = 'hidden';
+    button2.parentNode.removeChild(button2);
     this.button3 = button3;
-    button3.style.visibility = 'hidden';
+    button3.parentNode.removeChild(button3);
 }
 
 // IFFE function for starting the game
 (startGame = () => {
-    enterName();
-
-    // create components on the canvas
-    myGamePiece = new component(30, 30, "red", 10, 120);
-    myScore = new component("30px", "Consolas", "black", 280, 40, "text");
-    myBackgroundImage = new component(480, 270, "lightgray", 0, 0);
+    enterName();    
 }) ();
