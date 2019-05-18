@@ -3,6 +3,7 @@ var myGamePiece;
 var myObstacles = [];
 var myScore;
 var myBackgroundImage;
+var name;
 
 // main functions that manipulate canvas
 var myGameArea = {
@@ -14,6 +15,7 @@ var myGameArea = {
         this.canvas.width = 480;
         this.canvas.height = 270;
         this.context = this.canvas.getContext("2d");
+
         // insert canvas as first element in <body> tag
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
 
@@ -38,10 +40,10 @@ var myGameArea = {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     },
 
-    // stops the interval and alerts with score
+    // stops the interval and alerts the user with his score
     stop : function() {
         clearInterval(this.interval);
-        alert(`Game over!
+        alert(`Game over ${name}!
 Your score: ${Math.floor((myGameArea.frameNo/150)-2)}`
         );
     }
@@ -247,9 +249,23 @@ updateGameArea = () => {
     myGamePiece.update();
 }
 
+// function that prompts you to enter the name
+enterName = () => {
+    // prompt that requires name
+    let txt = prompt("Please enter your name: ", "Enter name here!");
+    if(name == null || name == ""){
+        name = 'You did not choose a name';
+    }else{
+        name = txt;
+    }
+
+    // starts the game
+    myGameArea.start();
+}
+
 // IFFE function for starting the game
 (startGame = () => {
-    myGameArea.start();
+    enterName();
 
     // create components on the canvas
     myGamePiece = new component(30, 30, "red", 10, 120);
