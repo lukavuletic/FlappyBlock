@@ -4,6 +4,7 @@ var myObstacles = [];
 var myScore;
 var myBackgroundImage;
 var name;
+var difficulty;
 
 // main functions that manipulate canvas
 var myGameArea = {
@@ -22,7 +23,7 @@ var myGameArea = {
         // initialize frame counter to 0
         this.frameNo = 0;
         // start the interval and call updateGameArea each 20 ms
-        this.interval = setInterval(updateGameArea, 20);
+        this.interval = setInterval(updateGameArea, difficulty);
 
         // check if the key is pressed/held down
         window.addEventListener('keydown', function(e){
@@ -259,8 +260,56 @@ enterName = () => {
         name = txt;
     }
 
-    // starts the game
-    myGameArea.start();
+    // leads you to choose difficulty screen
+    chooseDifficulty();
+}
+
+// lets you choose the game difficulty
+chooseDifficulty = () => {
+    // creates flavor text and inserts it into body
+    let gameDiffTxt = document.createElement("h1");
+    gameDiffTxt.innerHTML = "Choose the difficulty!";
+    document.body.insertAdjacentElement('beforebegin', gameDiffTxt);
+
+    // creates 3 buttons for choosing the difficulty and inserting them into body
+    let buttonEasyGameDiff = document.createElement("button");
+    buttonEasyGameDiff.innerHTML = "Easy";
+    let buttonMediumGameDiff = document.createElement("button");
+    buttonMediumGameDiff.innerHTML = "Medium";
+    let buttonHardGameDiff = document.createElement("button");
+    buttonHardGameDiff.innerHTML = "Hard";
+    document.body.insertAdjacentElement('beforeend', buttonEasyGameDiff);
+    document.body.insertAdjacentElement('beforeend', buttonMediumGameDiff);
+    document.body.insertAdjacentElement('beforeend', buttonHardGameDiff);
+
+    // on click sets the interval speed, hides elements and starts the game
+    buttonEasyGameDiff.addEventListener("click", function(){
+        difficulty = 20;
+        hideElementsOnStart(gameDiffTxt, buttonEasyGameDiff, buttonMediumGameDiff, buttonHardGameDiff);
+        myGameArea.start();
+    });
+    buttonMediumGameDiff.addEventListener("click", function(){
+        difficulty = 15;
+        hideElementsOnStart(gameDiffTxt, buttonEasyGameDiff, buttonMediumGameDiff, buttonHardGameDiff);
+        myGameArea.start();
+    });
+    buttonHardGameDiff.addEventListener("click", function(){
+        difficulty = 10;
+        hideElementsOnStart(gameDiffTxt, buttonEasyGameDiff, buttonMediumGameDiff, buttonHardGameDiff);
+        myGameArea.start();
+    });
+}
+
+// function to hide elements when the game is being played
+hideElementsOnStart = (txt, button1, button2, button3) => {
+    this.txt = txt;
+    txt.style.visibility = 'hidden';
+    this.button1 = button1;
+    button1.style.visibility = 'hidden';
+    this.button2 = button2;
+    button2.style.visibility = 'hidden';
+    this.button3 = button3;
+    button3.style.visibility = 'hidden';
 }
 
 // IFFE function for starting the game
